@@ -24,7 +24,14 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new HeaderHttpSessionStrategy();
     }
 
-	@Override
+
+    /**
+     * All requests must be authenticated using Basic Auth.
+     * Cross site request forgery is disabled for the rest services.
+     * @param http
+     * @throws Exception
+     */
+    @Override
 	protected void configure(HttpSecurity http) throws Exception {
         http
             .authorizeRequests()
@@ -44,6 +51,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         auth.userDetailsService(userDetailsServiceBean());
 	}
 
+    /**
+     * Custom user details service to retrieve the user's password from
+     * the SQLite database
+     * @return
+     * @throws Exception
+     */
     @Override
     public UserDetailsService userDetailsServiceBean() throws Exception {
         return new CustomUserDetailsService(userRepository);
